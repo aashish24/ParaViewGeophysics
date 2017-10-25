@@ -2,7 +2,7 @@
 
 # See blog for details: https://blog.kitware.com/easy-customization-of-the-paraview-python-programmable-filter-property-panel/
 #
-# This code has been modified by Bane Sullivan (banesullivan@gmail.com) for making customized filters in the geoscience data visualization. Credit does not go to Bane for this script but to the author of the above blog post.
+# This code has been heavily modified by Bane Sullivan (banesullivan@gmail.com) for making customized filters in the geoscience data visualization. Credit does not go to Bane for this script but to the author of the above blog post.
 
 
 import os
@@ -102,11 +102,13 @@ def getPythonPathProperty():
 
 
 
-def getFilterPropertyXml(propertyInfo, propertyName):
+def getFilterPropertyXml(propertyInfo, propertyName, propertyHelpInfo):
 
     vis = 'default'
     if 'HIDE' in propertyName:
         vis = 'advanced'
+
+    propertyHelp = propertyHelpInfo.get(propertyName, '')
 
     e = escapeForXmlAttribute
 
@@ -142,8 +144,8 @@ def getFilterPropertyXml(propertyInfo, propertyName):
         default_values="%s"
         number_of_elements="%s">
         <BooleanDomain name="bool" />
-        <Documentation></Documentation>
-      </IntVectorProperty>''' % (vis, propertyName, propertyLabel, propertyName, defaultValues, numberOfElements)
+        <Documentation>%s</Documentation>
+      </IntVectorProperty>''' % (vis, propertyName, propertyLabel, propertyName, defaultValues, numberOfElements, propertyHelp)
 
 
     if propertyType is int:
@@ -157,8 +159,8 @@ def getFilterPropertyXml(propertyInfo, propertyName):
         animateable="1"
         default_values="%s"
         number_of_elements="%s">
-        <Documentation></Documentation>
-      </IntVectorProperty>''' % (vis, propertyName, propertyLabel, propertyName, defaultValues, numberOfElements)
+        <Documentation>%s</Documentation>
+      </IntVectorProperty>''' % (vis, propertyName, propertyLabel, propertyName, defaultValues, numberOfElements, propertyHelp)
 
     if propertyType is float:
         return '''
@@ -171,8 +173,8 @@ def getFilterPropertyXml(propertyInfo, propertyName):
         animateable="1"
         default_values="%s"
         number_of_elements="%s">
-        <Documentation></Documentation>
-      </DoubleVectorProperty>''' % (vis, propertyName, propertyLabel, propertyName, defaultValues, numberOfElements)
+        <Documentation>%s</Documentation>
+      </DoubleVectorProperty>''' % (vis, propertyName, propertyLabel, propertyName, defaultValues, numberOfElements, propertyHelp)
 
     if propertyType is str:
         if 'FileName' in propertyName:
@@ -187,8 +189,8 @@ def getFilterPropertyXml(propertyInfo, propertyName):
             default_values="%s"
             number_of_elements="%s">
             <FileListDomain name="files"/>
-            <Documentation></Documentation>
-          </StringVectorProperty>''' % (vis, propertyName, propertyLabel, propertyName, defaultValues, numberOfElements)
+            <Documentation>%s</Documentation>
+          </StringVectorProperty>''' % (vis, propertyName, propertyLabel, propertyName, defaultValues, numberOfElements, propertyHelp)
         else:
             return '''
             <StringVectorProperty
@@ -200,8 +202,8 @@ def getFilterPropertyXml(propertyInfo, propertyName):
             animateable="1"
             default_values="%s"
             number_of_elements="%s">
-            <Documentation></Documentation>
-            </StringVectorProperty>''' % (vis, propertyName, propertyLabel, propertyName, defaultValues, numberOfElements)
+            <Documentation>%s</Documentation>
+            </StringVectorProperty>''' % (vis, propertyName, propertyLabel, propertyName, defaultValues, numberOfElements, propertyHelp)
 
     raise Exception('Unknown property type: %r' % propertyType)
 
@@ -209,7 +211,8 @@ def getFilterPropertyXml(propertyInfo, propertyName):
 def getFilterPropertiesXml(info):
 
     propertyInfo = info['Properties']
-    xml = [getFilterPropertyXml(propertyInfo, name) for name in sorted(propertyInfo.keys())]
+    propertyHelpInfo = info.get('PropertiesHelp', {})
+    xml = [getFilterPropertyXml(propertyInfo, name, propertyHelpInfo) for name in sorted(propertyInfo.keys())]
     return '\n\n'.join(xml)
 
 
@@ -300,14 +303,13 @@ def getOutputDataSetTypeXml(info):
 
 
 def getProxyGroup(info):
-    if not info.has_key("Group"):
+    if "Group" not in info:
         return 'sources' if getNumberOfInputs(info) == 0 else 'filters'
-    else: return info["Group"]
+    else:
+        return info["Group"]
 
 
 def generatePythonFilter(info):
-
-
     e = escapeForXmlAttribute
 
     proxyName = info['Name']
@@ -348,7 +350,7 @@ def generatePythonFilter(info):
     return textwrap.dedent(outputXml)
 
 def getFilterGroup(info):
-    if not info.has_key("FilterCategory"):
+    if "FilterCategory" not in info:
         return ''
     else:
         return ('''\

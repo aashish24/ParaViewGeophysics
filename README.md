@@ -1,18 +1,18 @@
 # ParaView Geophysics Plugins
 This repository contains plugins for the open-source, multi-platform data analysis, and visualization application [ParaView by Kitware](https://www.paraview.org). These plugins are tailored to data visualization in the geosciences with a heavy focus on structured data sets like 2D or 3D grids.
 
-Check out the [Wiki page](https://github.com/banesullivan/ParaViewGeophysics/wiki) to explore the motivation for publishing this repo as well as to find all documentation and some visualization examples. Use the [Wiki Contents](https://github.com/banesullivan/ParaViewGeophysics/wiki/Wiki-Contents) to navigate the Wiki and to see all documentation for readers, filters, macros, and more as you need.
+Check out the [Docs pages](http://paraviewgeophysics.readthedocs.io/) to explore the motivation for publishing this repo as well as to find all documentation and some visualization examples. This contains documentation for readers, filters, macros, and more as you need.
 
 Also checkout [this PDF](https://drive.google.com/file/d/0B6v2US3m042-dzBSR1laSXdiYlU/view?usp=sharing) standalone presentation about the project.
 
-##### *NOTICE:* This repo is under development as the project just started! Consider everything here to be an Alpha (soon to be Beta) release.
+*NOTICE:* This repo is under development as the project just started! Consider everything here to be an Alpha (soon to be Beta) release.
 
 ## About the Author
 Unless otherwise specified at the top of the file, all code and documentation distributed here were produced by [Bane Sullivan](https://github.com/banesullivan/), undergraduate research assistant in the Geophysics Department at the Colorado School of Mines under Dr. Whitney J. Trainor-Guitton. Feel free to contact Bane for questions or for custom filters/readers to visualize geoscience data through the [Issues page](https://github.com/banesullivan/ParaViewGeophysics/issues)
 
 ## More to come
 
-Stay tuned; this project is in its early stages of development, so only a handful of the plugins are tested and published here. Also be sure to check out the [Wiki page](https://github.com/banesullivan/ParaViewGeophysics/wiki) (*currently being developed and proofed*) for detailed documentation on the filters and general use of this repository.
+Stay tuned; this project is in its early stages of development, so only a handful of the plugins are tested and published here. Also be sure to out the [Docs pages](http://paraviewgeophysics.readthedocs.io/) (*currently being developed and proofed*) for detailed documentation on the filters and general use of this repository.
 
 ## How To Use the Plugins in this Repository
 
@@ -40,19 +40,23 @@ Also, be sure to place/install ParaView and this repository to a location that h
 
 You *MUST* add a `PVPLUGINPATH` variable in your bash profile! This variable will describe the plugin path within ParaView's application content. It is likely different depending on your OS and your version of ParaView. On MacOS, simply just replace `/ParaView-5.4.0.app/` with the name of your version of ParaView under `/Applications/`. To double check the correct path for filter installation, open ParaView and select Tools->Manage Plugins... and copy/paste the path at the top of the window where it says "Local plugins are automatically searched for in ..."
 
-Add the `PVPLUGINPATH` variable to your environment through your `~/.bash_profile` by executing:
+Add the `PVPLUGINPATH` variable to your environment through your `~/.bash_profile` by adding this expression:
 ```bash
 # ParaViewPlugins on Unix:
 # Be sure to check that this path matches yours... Odds are it's different!
-$ echo "\n# Path for ParaView Plugins for the ParaViewGeophysics Repo: \nexport PVPLUGINPATH=\"/Applications/ParaView-5.4.0.app/Contents/MacOS/plugins/\"" >> ~/.bash_profile
+
+# Path for ParaView Plugins for the ParaViewGeophysics Repo:
+export PVPLUGINPATH="/Applications/ParaView-5.4.0.app/Contents/MacOS/plugins/"
 ```
 
-Windows users, open Cygwin and edit your `~/.bash_profile` by executing this command to place a `PVPLUGINPATH` variable in your environment. Be sure to replace the path to ParaView with your path to ParaView (e.g. `/cygdrive/d/ParaView/...` to `/cygdrive/d/ParaView-5.4.0/...`)
+Windows users, open Cygwin and edit your `~/.bash_profile` through `vim` to place a `PVPLUGINPATH` variable in your environment. Be sure to replace the path to ParaView with your path to ParaView (e.g. `/cygdrive/d/ParaView/...` to `/cygdrive/d/ParaView-5.4.0/...`)
 
 ```bash
 # ParaViewPlugins on Windows via Cygwin
 # Be sure to check that this path matches yours... Odds are it's different!
-$ echo "\n# Path for ParaView Plugins for the ParaViewGeophysics Repo: \nexport PVPLUGINPATH=\"/cygdrive/d/ParaView/bin/plugins/\"" >> ~/.bash_profile
+
+# Path for ParaView Plugins for the ParaViewGeophysics
+export PVPLUGINPATH="/cygdrive/d/ParaView/bin/plugins/"
 ```
 
 ### Installing the Plugins to ParaView
